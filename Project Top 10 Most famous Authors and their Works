@@ -1,0 +1,139 @@
+-- Top 10 Most famous Authors
+
+
+-- create a table named Famous_Authors, with primary key, fullName, year of birth, year of death, country of origin, number of works.
+
+-- create a table named literacy works, with primary key, Author ID, genre, works_type, literacy works name, and year publshed.
+
+CREATE TABLE Famous_Authors (Author_ID INTEGER PRIMARY KEY AUTOINCREMENT, Full_Name TEXT, Year_of_Birth TEXT, Year_of_Death INTEGER, Country_of_origin INTEGER, Number_of_works INTEGER);
+
+INSERT INTO Famous_Authors VALUES(1, "William Shakespeare", 1564, 1616, "England", 38);
+
+INSERT INTO Famous_Authors VALUES(2, "Charles Dickens", 1812, 1870, "England",15);
+
+INSERT INTO Famous_Authors VALUES(3, "George Orwell", 1903,1950, "British India", 9);
+
+INSERT INTO Famous_Authors VALUES(4, "J.K. Rowling", 1965, NULL,"England", 48);
+
+INSERT INTO Famous_Authors VALUES(5, "Virginia Woolf", 1882, 1941, "England", 30);
+
+INSERT INTO Famous_Authors VALUES(6, "Ernest Hemingway", 1899, 1961, "United States", 15);
+
+INSERT INTO Famous_Authors VALUES(7, "William Faulkner", 1897, 1962, "United States", 13);
+
+INSERT INTO Famous_Authors VALUES(8, "Fyodor Dostoevsky", 1821, 1881, "Russian Empire", 256);
+
+INSERT INTO Famous_Authors VALUES(9, "James Joyce", 1882, 1941, "Ireland", 30);
+
+INSERT INTO Famous_Authors VALUES(10, "Oscar Wilde", 1854, 1900, "Ireland", 78);
+
+CREATE TABLE Literacy_Works (Author_ID INTEGER, genre TEXT, Type_of_work TEXT, Name_of_Work TEXT, Year_Published INTEGER);
+
+INSERT INTO Literacy_Works VALUES( 1, "tradegy", "play", "Romeo and Juliet", 1597);
+
+INSERT INTO Literacy_Works VALUES(1, "tradegy", "play", "Hamlet", 1604);
+
+INSERT INTO Literacy_Works VALUES(1, "tradegy", "play", "Macbeth", 1623);
+
+INSERT INTO Literacy_Works VALUES(1, "comedy", "play", "A Midsummer Night's Dream", 1596);
+
+INSERT INTO Literacy_Works VALUES(2, "Gothic Romance", "Book", "Oliver Twist", 1837);
+
+INSERT INTO Literacy_Works VALUES(2, "Gothic", "Novella", "A Christmas Carol", 1843);
+
+INSERT INTO Literacy_Works VALUES(2, "Historical Fiction", "Book", "A Tale of Two Cities", 1859);
+
+INSERT INTO Literacy_Works VALUES(2, "Bildungsroman", "Book", "Great Expectations", 1860);
+
+INSERT INTO Literacy_Works VALUES(3, "Political Satire", "Book", "Animal Farm", 1945);
+
+INSERT INTO Literacy_Works VALUES(3, "Dystopian Science fiction", "Book", "Nineteen eighty-four", 1949);
+
+INSERT INTO Literacy_Works VALUES(3, "Autobiography", "Book", "Homage to Catolonia", 1938);
+
+INSERT INTO Literacy_Works VALUES(3, "Autobiographical memoir", "Book", "Down and Out in Paris and London", 1933);
+
+INSERT INTO Literacy_Works VALUES(4, "Fantasy", "Book", "Harry Potter and the Sorcerer's Stone", 1997);
+
+INSERT INTO Literacy_Works VALUES(4, "Fantasy", "Book", "Harry Potter and the Chamber of Secrets", 1998);
+
+INSERT INTO Literacy_Works VALUES(4, "Fantasy", "Book", "Harry Potter and the Prisoner of Azkaban", 1999);
+
+INSERT INTO Literacy_Works VALUES(4, "Fantasy","Book", "Harry Potter and the Goblet of Fire", 2000);
+
+INSERT INTO Literacy_Works VALUES(5, "Modernism", "Book", "Mrs. Dalloway", 1925);
+
+INSERT INTO Literacy_Works VALUES(5, "Satiric", "Book", "Orlando: A Biography", 1928);
+
+INSERT INTO Literacy_Works VALUES(5, "Fiction", "Book", "To the Lighthouse", 1927);
+
+INSERT INTO Literacy_Works VALUES(5, "philosophical", "Essay", "A Room of One's Own", 1929);
+
+INSERT INTO Literacy_Works VALUES(6, "Fiction", "Book", "The Old Man and the Sea", 1952);
+
+INSERT INTO Literacy_Works VALUES(6, "Romance", "Book", "A Farewell to Arms", 1929);
+
+INSERT INTO Literacy_Works VALUES(6, "War Novel", "Book", "For Whom the Bell Tolls", 1940);
+
+INSERT INTO Literacy_Works VALUES(6, "Modernism", "Book", "The Sun Also Rises", 1926);
+
+INSERT INTO Literacy_Works VALUES(7, "Gothic", "Book", "Sanctuary", 1931);
+
+INSERT INTO Literacy_Works VALUES(7, "Historical Fiction","Book", "Soldier's Pay", 1926);
+
+INSERT INTO Literacy_Works VALUES(7, "Southern Gothic", "Book", "A Rose for Emily", 1930);
+
+INSERT INTO Literacy_Works VALUES(7, "Southern Gothic", "Book", "The Sound and the Fury", 1929);
+
+INSERT INTO Literacy_Works VALUES(8, "Psychological Drama", "Book", "Crime and Punishment", 1866);
+
+INSERT INTO Literacy_Works VALUES(8, "philosophical", "Book", "The Idiot", 1868);
+
+INSERT INTO Literacy_Works VALUES(8, "Romance", "Book", "Poor Folk", 1846);
+
+INSERT INTO Literacy_Works VALUES(8, "Psychological Drama", "Book", "Demons", "1871");
+
+INSERT INTO Literacy_Works VALUES(9, "Realist Fiction", "Book", "Dubliners", 1914);
+
+INSERT INTO Literacy_Works VALUES(9, "Fiction", "Book", "A Portrait of the Artist as a Young Man", 1916);
+
+INSERT INTO Literacy_Works VALUES(9, "Drama", "play", "Exiles", 1918);
+
+INSERT INTO Literacy_Works VALUES(9, "Modernism", "Book", "Ulysses", 1922);
+
+INSERT INTO Literacy_Works VALUES(10, "Romance", "play", "The Importance of being Earnest", 1895);
+
+INSERT INTO Literacy_Works VALUES(10, "Gothic", "Book", "The Picture of Dorian Grey", 1890);
+
+INSERT INTO Literacy_Works VALUES(10, "autobiographal", "letter", "De Profundis", 1905);
+
+INSERT INTO Literacy_Works VALUES(10, "Fairy Tales", "Book", "The Happy Prince and other Tales", 1888);
+
+
+--How many Works in total were published from the famous authors top 4 works before 1950?
+
+SELECT COUNT(Year_Published) FROM Literacy_Works WHERE Year_Published <1950;
+
+
+-- Using a Join, display a table showing the Author Names with their Works Name and group them by their year published
+
+
+SELECT F.full_name AS Author_Name, L.name_of_work
+
+FROM Famous_authors F
+
+JOIN Literacy_Works L
+
+ON F.Author_ID=L.Author_id
+
+GROUP BY Year_Published;
+
+
+-- Self Joins, Match Authors that are from the same country
+
+SELECT A.Full_Name AS AuthorName1, B.Full_Name AS AuthorName2, A.Country_of_origin
+FROM Famous_Authors A, Famous_Authors B
+WHERE A.Full_Name <> B.Full_Name
+AND A.Country_of_origin = B.Country_of_origin
+ORDER BY A.Country_of_origin;
+
