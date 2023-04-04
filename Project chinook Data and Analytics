@@ -1,0 +1,129 @@
+# Hello! In this SQL code, I am querying a database called Chinook, so I can answer quesitions about the data. 
+
+
+# In this project, I  will work with a dataset called chinook, which represents a digital media store and includes 11 tables for 
+artists, albums, media tracks, invoices, and customers.
+
+
+
+
+
+/*/ 1. Show Customers(their full names,customerid,and country) 
+who are not in Canada./*/
+
+SELECT FirstName,LastName,CustomerId,Country
+FROM customers
+WHERE country <> 'Canada';
+
+
+/*/ 2. Show only the customers from France./*/
+SELECT *
+FROM customers
+WHERE country = 'France';
+
+/*/ 3. Find the Invoices of customers who are from France. The resulting
+table should show the Customers Fullname, InvoiceID, date of Invoice, and
+Billing Country./*/
+
+SELECT Customers.FirstName,Customers.LastName,invoices.invoiceId,
+invoices.BillingCountry,Invoices.InvoiceDate
+FROM invoices
+LEFT JOIN customers 
+ON invoices.CustomerId = Customers.CustomerId
+WHERE invoices.billingCountry = "France";
+
+/*/4. Show the Employees who are Managers.
+
+SELECT *
+FROM Employees
+WHERE Title LIKE "%Manager%";
+
+/*/5. Find a Unique list of Billing Countries from the Invoice Table /*/
+
+SELECT DISTINCT BillingCountry
+FROM Invoices;
+
+
+/*/6. Provide a query that shows the invoices associated with Sales 
+Agent. The resulting table should include the Agent's full name./*/
+ 
+SELECT employees.FirstName,employees.LastName,Invoices.InvoiceID
+FROM Employees 
+JOIN Customers 
+ON Customers.SupportRepID = Employees.EmployeeId
+JOIN Invoices ON Invoices.CustomerId = customers.CustomerId;
+
+/*/ 7. Show the invoice total, customer name, country, and sales agent name for all invoices and customers./*/
+
+SELECT employees.FirstName,employees.LastName,customers.FirstName,customers.LastName,
+customers.country,invoices.total
+FROM employees
+JOIN customers ON customers.supportrepId = employees.employeeId
+JOIN invoices ON invoices.CustomerId = customers.customerId;
+
+/*/ 8. How many Invoices were there in 2012? /*/
+
+SELECT COUNT(*)
+FROM invoices
+WHERE invoiceDate BETWEEN '2012-01-01' AND '2012-12-31';
+
+/*/ 9. What are the total sales for 2012?/*/
+
+SELECT SUM(total)
+FROM invoices 
+WHERE invoicedate BETWEEN '2012-01-01' AND '2012-12-31';
+
+/*/ 10. Write a query that includes the purchased track name with each invoice line ID ?*? 
+
+SELECT tracks.Name, invoice_items.invoiceLineId
+FROM Invoice_items
+JOIN tracks
+ON invoice_items.trackId = tracks.trackId;
+
+/*/ 11. Write a query that includes the purchased track name AND artist name with each invoice line ID. /*/
+
+SELECT artists.Name AS Artist, tracks.Name AS track, invoice_items.InvoiceLineID
+FROM invoice_items
+LEFT JOIN tracks
+ON invoice_items.TrackID = tracks.TrackID
+INNER JOIN albums
+ON albums.albumID = tracks.albumID
+LEFT JOIN artists
+ON artists.artistID = albums.ArtistID;
+
+/*/ 12. Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre. /*/
+
+SELECT tracks.Name AS 'Track Name', Albums.Title AS 'Albums Title', Media_types.Name AS 'Media Type', Genres.Name AS ' Genre'
+FROM tracks
+JOIN albums
+ON albums.albumId = tracks.albumId
+JOIN Media_types
+ON media_types.mediatypeid = tracks.mediatypeid
+JOIN genres
+ON genres.genreid = tracks.genreId;
+
+/*/ 13. show the total sales made by each sales agent. /*/
+
+SELECT employees.FirstName, employees.LastName,
+ROUND(SUM(Invoices.Total), 2) as 'Total Sales'
+FROM employees
+JOIN customers
+ON customers.SupportRepId = employees.employeeid
+JOIN invoices
+ON invoices.customerId = customers.customerId
+WHERE employees.title = 'Sales Support Agent'
+GROUP BY employees.FirstName;
+
+/*/ 14. Which sales agent made the most dollars in sales in 2012? /*/
+
+SELECT employees.FirstName,employees.LastName,
+ROUND(SUM(invoices.total),2) AS 'Total Sales'
+FROM employees
+JOIN customers
+ON customers.supportrepid = employees.employeeid
+JOIN invoices
+ON invoices.CustomerId = customers.customerid
+WHERE employees.Title = 'Sales Support Agent'
+AND invoices.invoiceDate LIKE '2012%'
+GROUP BY employees.FirstName
+ORDER BY (ROUND(SUM(Invoices.Total), 2)) DESC LIMIT 1;
